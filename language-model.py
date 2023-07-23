@@ -1,10 +1,4 @@
 # %%
-!pip install numba
-
-# %%
-!pip install dill
-
-# %%
 # Imports
 import tensorflow as tf
 from timeit import default_timer as timer
