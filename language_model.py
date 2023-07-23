@@ -354,9 +354,3 @@ def train(data, model, epochs):
     run_epoch(data, model)
     save_models()
     print("{}/{} epochs completed.".format(i + 1, epochs))
-
-if __name__ == "main":
-  # %%
-  train(training_set, generation_net, 1)
-  # %%
-  save_models()
