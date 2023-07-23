@@ -40,7 +40,7 @@ def test_gpu_speed():
 
 # %%
 # Loads dataset
-data_file = open(dir_path + "all_scripts_raw.json", "r")
+data_file = open(dir_path + "/all_scripts_raw.json", "r")
 data_string = data_file.read()
 data = json.loads(data_string)
 
