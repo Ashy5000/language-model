@@ -343,7 +343,7 @@ def run_epoch(data, model):
 
 # %%
 def save_models():
-  with open("/inputs/language-model/model.bin", "bw") as model_file:
+  with open("/outputs/language-model/model.bin", "bw") as model_file:
     pickler = dill.Pickler(model_file)
     models_string = pickler.dump({ "conversion": conversion_net, "generation": generation_net })
     print("Models successfully saved.")
