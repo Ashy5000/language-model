@@ -9,6 +9,9 @@ import math
 from numba import jit, cuda
 import dill
 import sys
+import os
+
+dir_path = os.path.dirname(os.path.realpath(__file__))
 
 # %%
 # Function for CPU/GPU speed comparison
@@ -37,7 +40,7 @@ def test_gpu_speed():
 
 # %%
 # Loads dataset
-data_file = open("all_scripts_raw.json", "r")
+data_file = open(dir_path + "all_scripts_raw.json", "r")
 data_string = data_file.read()
 data = json.loads(data_string)
 
@@ -170,7 +173,7 @@ def generate_networks():
 # %%
 # Loads neural networks
 def load_networks():
-  with open("model.bin", "br") as model_file:
+  with open("/datasets/language-model/model.bin", "br") as model_file:
     unpickler = dill.Unpickler(model_file)
     models_object = unpickler.load()
   return { "conversion": models_object["conversion"], "generation": models_object["generation"] }
@@ -349,7 +352,7 @@ def run_epoch(data, model):
 
 # %%
 def save_models():
-  with open("../datasets/language-model/model.bin", "bw") as model_file:
+  with open("/datasets/language-model/model.bin", "bw") as model_file:
     pickler = dill.Pickler(model_file)
     models_string = pickler.dump({ "conversion": conversion_net, "generation": generation_net })
     print("Models successfully saved.")
