@@ -177,7 +177,7 @@ def generate_networks():
 # %%
 # Loads neural networks
 def load_networks():
-  with open("/inputs/language-model/model.bin", "br") as model_file:
+  with open("model.bin", "br") as model_file:
     unpickler = dill.Unpickler(model_file)
     models_object = unpickler.load()
   return { "conversion": models_object["conversion"], "generation": models_object["generation"] }
@@ -234,6 +234,16 @@ conversion_net = networks["conversion"]
 generation_net = networks["generation"]
 
 # %%
+# Run this cell to generate a new model
+networks = generate_networks()
+conversion_net = networks["conversion"]
+generation_net = networks["generation"]
+
+# %%
+# Run this cell to run the model
+run_interface()
+
+# %%
 # Cost/loss function (Mean Squared Error)
 def squared_error(pred, true):
   squared_error = (pred[0] - true) ** 2
@@ -254,9 +264,10 @@ def evaluate_inputs_list(model, inputs_list):
 
 # %%
 def mean_squared_error(pred, true):
-  errors = np.subtract(true, pred)
-  squared_errors = np.square(errors)
-  return squared_errors.mean()
+  squared_errors = []
+  for i in range(len(pred)):
+    squared_errors.append(squared_error(pred[i], true[i]))
+  return sum(squared_errors) / len(squared_errors)
 
 # %%
 # Function that returns a function that takes in inputs and the value for a specific weight in a neural network.
@@ -303,6 +314,19 @@ def optimize_weight(model, net, layer, neuron, weight, inputs_list, desired):
   model.sections[net].layers[layer].neurons[neuron].weights[weight] += final_nudge
 
 # %%
+def get_loss():
+  inputs_list = []
+  desired = []
+  for chunk in training_set:
+    inputs_list.append(text_to_int(chunk["known"]))
+    desired.append([char_to_int(chunk["unknown"])])
+  neural_net_outputs = evaluate_inputs_list(generation_net, inputs_list)
+  actual = []
+  for i in range(len(neural_net_outputs)):
+    actual.append(neural_net_outputs[i][0])
+  return mean_squared_error(desired, actual)
+
+# %%
 def run_epoch(data, model):
   print("Running epoch...")
   inputs_list = []
@@ -328,11 +352,11 @@ def run_epoch(data, model):
         sys.stdout.write("|")
       print(" Layer optimized.")
     print("Section optimized.")
-  print("Current loss: {}".format(mean_squared_error(desired, evaluate_inputs_list(model, inputs_list))))
+  print("Current loss: {}".format(get_loss()))
 
 # %%
 def save_models():
-  with open("/outputs/language-model/model.bin", "bw") as model_file:
+  with open("../datasets/language-model/model.bin", "bw") as model_file:
     pickler = dill.Pickler(model_file)
     models_string = pickler.dump({ "conversion": conversion_net, "generation": generation_net })
     print("Models successfully saved.")
