@@ -173,7 +173,7 @@ def generate_networks():
 # %%
 # Loads neural networks
 def load_networks():
-  with open("/datasets/language-model/model.bin", "br") as model_file:
+  with open("/inputs/language-model/model.bin", "br") as model_file:
     unpickler = dill.Unpickler(model_file)
     models_object = unpickler.load()
   return { "conversion": models_object["conversion"], "generation": models_object["generation"] }
