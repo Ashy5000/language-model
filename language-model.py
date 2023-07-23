@@ -173,7 +173,7 @@ def generate_networks():
 # %%
 # Loads neural networks
 def load_networks():
-  with open("/inputs/language-model/model.bin", "br") as model_file:
+  with open("/storage/model.bin", "br") as model_file:
     unpickler = dill.Unpickler(model_file)
     models_object = unpickler.load()
   return { "conversion": models_object["conversion"], "generation": models_object["generation"] }
@@ -226,12 +226,6 @@ def run_interface():
 # %%
 # Run this cell to load the model from model.txt
 networks = load_networks()
-conversion_net = networks["conversion"]
-generation_net = networks["generation"]
-
-# %%
-# Run this cell to generate a new model
-networks = generate_networks()
 conversion_net = networks["conversion"]
 generation_net = networks["generation"]
 
@@ -352,7 +346,7 @@ def run_epoch(data, model):
 
 # %%
 def save_models():
-  with open("/datasets/language-model/model.bin", "bw") as model_file:
+  with open("/storage/model.bin", "bw") as model_file:
     pickler = dill.Pickler(model_file)
     models_string = pickler.dump({ "conversion": conversion_net, "generation": generation_net })
     print("Models successfully saved.")
