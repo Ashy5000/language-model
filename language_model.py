@@ -65,8 +65,8 @@ print(training_set)
 
 # %%
 chars = sorted(list(set(data_string)))
-text_int_conversion_dict = {"\n": 91, "\r": 92}
-int_text_conversion_dict = {91: "\n", 92: "\r"}
+text_int_conversion_dict = {"\n": 91, "\r": 92, "®": 93}
+int_text_conversion_dict = {91: "\n", 92: "\r", 93: "®"}
 index = 0
 for char in chars:
   text_int_conversion_dict[char] = index
