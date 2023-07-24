@@ -1,4 +1,5 @@
-# %%
+print("Running lanaguage_model.py")
+
 # Imports
 from timeit import default_timer as timer
 import numpy as np
